@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: predictops-ml
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predictops-ml
+  template:
+    metadata:
+      labels:
+        app: predictops-ml
+    spec:
+      containers:
+        - name: predictops-ml
+          image: 200174508136.dkr.ecr.ap-south-1.amazonaws.com/predictops-ml:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: predictops-ml
+  namespace: default
+spec:
+  selector:
+    app: predictops-ml
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: ClusterIP

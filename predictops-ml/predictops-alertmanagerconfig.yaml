@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: predictops-email
+  namespace: default
+spec:
+  route:
+    receiver: predictops-email
+    groupBy:
+      - namespace
+      - target_service
+    matchers:
+      - name: alertname
+        value: PredictOpsHighAnomalyScore
+
+  receivers:
+    - name: predictops-email
+      emailConfigs:
+        - to: 2025ae05864@wilp.bits-pilani.ac.in
+          from: mailneerajibm@gmail.com
+          smarthost: smtp.gmail.com:587
+          authUsername: mailneerajibm@gmail.com
+          authIdentity: mailneerajibm@gmail.com
+          authPassword:
+            name: predictops-smtp
+            key: password
+          requireTLS: true
+          
